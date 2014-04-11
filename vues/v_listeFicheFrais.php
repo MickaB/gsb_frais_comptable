@@ -8,7 +8,8 @@
             <?php
 			foreach ($lesvisiteurs as $unVisiteur)
 			{
-                                
+                             
+                            
 				$VisiteurID = $unVisiteur['id'];
                                 $VisiteurNom = $unVisiteur['nom']; 
                                 
