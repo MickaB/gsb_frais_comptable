@@ -349,6 +349,18 @@ class PdoGsb{
             where fichefrais.idvisiteur ='$idVisiteur' and fichefrais.mois = '$mois'";
             PdoGsb::$monPdo->query($req);
     }
+    /**
+ * Modifie la ligne frais pour le mois et visiteur
+ 
+ * @param $idVisiteur 
+ * @param $mois sous la forme aaaamm et type
+ */
+ 
+    public function majLigneFrais($idVisiteur,$mois, $type, $quantite){
+            $req = "update lignefraisforfait set quantite = '$quantite'
+            where lignefraisforfait.idvisiteur ='$idVisiteur' and lignefraisforfait.mois = '$mois' and lignefraisforfait.idFraisForfait='$type'";
+            PdoGsb::$monPdo->query($req);
+    }
     
      public function getLesVisiteursDisponibles()
         {
@@ -365,10 +377,13 @@ class PdoGsb{
             }
             return $lesVisiteur;
         }
-         public function getLesMoisDisponiblesVisiteurValide() {
+        //----------------------MIKAFUNCTION-------------------------------------
+//---------------------------------------------------------------------------------------
+        
+        public function getLesMoisDisponiblesVisiteurValide() {
                 $req = "select distinct fichefrais.mois as mois,fichefrais.dateModif,fichefrais.montantValide,fichefrais.idEtat from fichefrais Where fichefrais.idEtat='VA' 
                         OR 
-                        (fichefrais.idEtat='RB' AND  MONTH(CURRENT_DATE)-MONTH(dateModif)<=4 AND CURRENT_DATE-dateModif<1)";
+                        (fichefrais.idEtat='VA' AND  MONTH(CURRENT_DATE)-MONTH(dateModif)<=4 AND CURRENT_DATE-dateModif<1)";
 		$res = PdoGsb::$monPdo->query($req);
                 $lesMois =array();
                 $laLigne = $res->fetch();
@@ -383,6 +398,25 @@ class PdoGsb{
                 }                
                 return $lesMois;          
        }  
+         
+       
+       //----------------------fiche frais-------------------------------------
+       //---------------------------------------------------------------------------------------
+        
+        public function getLesInfosFrais($levisiteur, $leMois) {
+                $req = "select fichefrais.montantValide, fichefrais.dateModif from fichefrais where idVisiteur=\"".$levisiteur."\" and mois=\"".$leMois."\";";
+		$res = PdoGsb::$monPdo->query($req);
+                $lesinfos =array();
+                $laLigne = $res->fetch();
+ 		while($laLigne != null)	{
+			$montantValide = $laLigne['montantValide'];
+                        $dateModif= $laLigne['dateModif'];
+                        $lesinfos[$montantValide]=array("montantValide"=>$montantValide,"dateModif"=>$dateModif);
+                        $laLigne = $res->fetch(); 
+                }     
+                print_r($lesinfos);
+                return $lesinfos;     
+        }
          
        
         public function getInfosVisiteurValide(){

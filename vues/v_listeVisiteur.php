@@ -8,9 +8,16 @@
 				<?php
 					foreach($visiteur as $v)
 					{
-						echo "<option value=".$v['id'].">";
+                                            if($idVisiteur==$v['id']){
+						echo "<option selected value=".$v['id'].">";
 						echo $v['nom']." ".$v['prenom'];
 						echo "</option>";
+                                            }
+                                            else{
+                                                echo "<option value=".$v['id'].">";
+						echo $v['nom']." ".$v['prenom'];
+						echo "</option>";
+                                            }
 					}
 				?>
 				</select>
