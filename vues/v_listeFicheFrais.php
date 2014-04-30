@@ -1,6 +1,7 @@
 <div id="contenu"> 
 <form method="post" action="index.php?uc=suivreFrais&action=afficherDetailsFiche">
-     
+     <fieldset>
+			<legend>Suivre une fiche de frais</legend>
             <p>
 
         <label for="lstVisiteur" accesskey="n">Visiteur : </label>
@@ -69,6 +70,6 @@
         <input id="ok" type="submit" value="Valider" size="20" />
         <input id="annuler" type="reset" value="Effacer" size="20" />
       </p> 
-        
+        </fieldset>
   
 </form>
