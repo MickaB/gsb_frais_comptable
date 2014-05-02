@@ -578,5 +578,44 @@ class PdoGsb{
             $req = "update lignefraishorsforfait set mois ='$mois' where id = '$id'";
             PdoGsb::$monPdo->query($req);
     }
+       
+        /**
+ * Modifie les lignes des frais Hors forfait
+ * pour chaque idFrais du tableau $lesFraisHF
+ * si la valeur est 'S' supprime cette ligne
+ * si la valeur est 'R' modifie cette ligne
+ * si la valeur est 'V' ne fait rien
+ * c�d ajoute un mois au champ 'mois'
+ * @param $lesFraisHF, tableau contenant les valeurs 'S', 'R', ou 'V' pour une cl� 'idFrais'
+ */
+        public function miseAjourFraisHF($lesFraisHF){
+            $lesCles = array_keys($lesFraisHF);
+            $i = 0;
+            foreach ($lesFraisHF as $unFraisHF){
+                $unIdFrais = $lesCles[$i];
+                $i++;
+                $req = "select lignefraishorsforfait.mois as mois,lignefraishorsforfait.idVisiteur as idVisiteur, lignefraishorsforfait.montant as montant from lignefraishorsforfait 
+                    where lignefraishorsforfait.id ='$unIdFrais'";	
+                $res = PdoGsb::$monPdo->query($req); 
+                $laLigne = $res->fetch();
+                $idVisiteur = $laLigne['idVisiteur'];
+                $mois = $laLigne['mois']; 
+                
+                if ($unFraisHF == 'S'){
+                    $this->supprimerFraisHorsForfait($unIdFrais);
+                } else {
+                    if ($unFraisHF == 'R'){
+                        $nouveau = getMoisSuivant($mois);
+                        $raq = "insert into fichefrais(idvisiteur,mois,nbJustificatifs,montantValide,dateModif,idEtat) 
+                                values('$idVisiteur','$nouveau',0,0,now(),'CR')";
+                        PdoGsb::$monPdo->exec($raq);
+                        $req = "update lignefraishorsforfait set lignefraishorsforfait.mois = '$nouveau'
+			where lignefraishorsforfait.id ='$unIdFrais'";
+			PdoGsb::$monPdo->exec($req);
+                        }
+                }
+                
+            }
+        }
 }
 ?>

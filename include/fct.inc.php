@@ -213,4 +213,26 @@ function obtenirLibelleMois($unNoMois) {
     }
     return $libelle;
 }
+
+/**
+ * retourne le mois au format aaaamm 
+ * suivant le mois donn� en param�tre 
+ * @param $mois au format aaaamm
+ * @return le mois au format aaaamm
+*/
+function getMoisSuivant($mois){
+    $numAnnee =substr( $mois,0,4);
+    $numMois =substr( $mois,4,2); 
+    if ($numMois == 12) {
+        $numAnnee ++;
+        $numMois = 1;
+     } 
+     else {
+        $numMois++;
+      }
+     if ($numMois < 10) {
+        $numMois = '0'.$numMois;}
+     return $numAnnee.$numMois;                     
+}
+
 ?>

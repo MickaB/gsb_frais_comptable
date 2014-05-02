@@ -1,4 +1,4 @@
-<form method="post" action="index.php?uc=validerFrais&action=validationFicheFrais&type=forfait">
+<form method="post" action="index.php?uc=validerFrais&action=validationFicheFrais">
 <h3>Fiche de frais du mois <?php echo $nomMois." ".$numAnnee?> de <?php echo $NomVisiteur['nom']." ".$NomVisiteur['prenom'] ?>: 
      </h3>
   	<table class="listeLegere">
